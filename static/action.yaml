@@ -43,10 +43,12 @@ runs:
         helm repo update
         echo $CI_PROJECT_NAME
         echo $CHART_VALUES
-        helm upgrade --atomic --install ronasitcom-nextjs ronasit/static --version ${CHART_VERSION} -f ${CHART_VALUES:="/dev/null"} --debug --namespace=${CI_PROJECT_NAME} --create-namespace \
+        helm upgrade --atomic --install ${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG} --version ${CHART_VERSION} -f ${CHART_VALUES:="/dev/null"} --debug \
+          --namespace=${CI_PROJECT_NAME} \
+          --create-namespace \
           --set fullnameOverride="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}" \
-          --set ingress.hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \ 
-          --set ingress.tls[0].secretName="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}-tls" \ 
-          --set ingress.tls[0].hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \ 
-          --set image.repository="${GKE_PROJECT}/${IMAGE}" \
+          --set ingress.hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \
+          --set ingress.tls[0].secretName="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}-tls" \
+          --set ingress.tls[0].hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \
+          --set image.repository="${GKE_PROJECT }/${IMAGE}" \
           --set image.tag="${GITHUB_RUN_NUMBER}" 
