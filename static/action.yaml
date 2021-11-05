@@ -29,13 +29,19 @@ runs:
         cluster_name: ${{ inputs.gke_cluster }}
         location: ${{ inputs.gke_zone }}
         credentials: ${{ inputs.gcloud_key }}
-    - run: |
+    - name: Install Helm
+      shell: bash
+      run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-    - run: |
+    - name: get cluster credentials
+      shell: bash
+      run: |
         gcloud container clusters get-credentials $GKE_CLUSTER \
           --zone $GKE_ZONE \
           --project $GKE_PROJECT
-    - run: |
+    - name: deploy
+      shell: bash
+      run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         helm repo add ronasit https://ronasit-charts.storage.googleapis.com
         helm repo update
