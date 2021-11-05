@@ -24,7 +24,7 @@ runs:
       with:
         service_account_key: ${{ inputs.gcloud_key }}
         project_id: ${{ inputs.gke_project }}
-    - uses: google-github-actions/get-gke-credentials@master
+    - uses: google-github-actions/get-gke-credentials@main
       with:
         cluster_name: ${{ inputs.gke_cluster }}
         location: ${{ inputs.gke_zone }}
