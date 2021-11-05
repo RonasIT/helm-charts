@@ -1,6 +1,5 @@
 name: "Deploy static helm chart"
 description: "Deploy static helm chart"
-description: "Build dotnet..."
 inputs:
   gcloud_key:
     description: 'Gcloud service account service key (encoded in base64)'
@@ -30,16 +29,13 @@ runs:
         cluster_name: ${{ inputs.gke_cluster }}
         location: ${{ inputs.gke_zone }}
         credentials: ${{ inputs.gcloud_key }}
-    - name: Install Helm
-      run: |
+    - run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-    - name: get cluster credentials
-      run: |
+    - run: |
         gcloud container clusters get-credentials $GKE_CLUSTER \
           --zone $GKE_ZONE \
           --project $GKE_PROJECT
-    - name: deploy
-      run: |
+    - run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         helm repo add ronasit https://ronasit-charts.storage.googleapis.com
         helm repo update
