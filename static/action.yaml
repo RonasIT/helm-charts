@@ -29,10 +29,6 @@ runs:
         cluster_name: ${{ inputs.gke_cluster }}
         location: ${{ inputs.gke_zone }}
         credentials: ${{ inputs.gcloud_key }}
-    - name: Install Helm
-      shell: bash
-      run: |
-        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
     - name: get cluster credentials
       shell: bash
       run: |
@@ -47,12 +43,12 @@ runs:
         helm repo update
         echo $CI_PROJECT_NAME
         echo $CHART_VALUES
-        helm upgrade --atomic --install ${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG} ${CHART_REPO} --version ${CHART_VERSION} -f ${CHART_VALUES:="/dev/null"} --debug \
-          --namespace=${CI_PROJECT_NAME} \
-          --create-namespace \
-          --set fullnameOverride="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}" \
-          --set ingress.hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \ 
-          --set ingress.tls[0].secretName="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}-tls" \ 
-          --set ingress.tls[0].hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \ 
-          --set image.repository="${GKE_PROJECT }/${IMAGE}" \
-          --set image.tag="${GITHUB_RUN_NUMBER}" 
+        helm upgrade --atomic --install ${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG} ${CHART_REPO} --version ${CHART_VERSION} -f ${CHART_VALUES:="/dev/null"} --debug 
+          # --namespace=${CI_PROJECT_NAME} \
+          # --create-namespace \
+          # --set fullnameOverride="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}" \
+          # --set ingress.hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \ 
+          # --set ingress.tls[0].secretName="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}-tls" \ 
+          # --set ingress.tls[0].hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \ 
+          # --set image.repository="${GKE_PROJECT }/${IMAGE}" \
+          # --set image.tag="${GITHUB_RUN_NUMBER}" 
