@@ -48,6 +48,6 @@ runs:
           --set ingress.hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \
           --set ingress.tls[0].secretName="${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG}-tls" \
           --set ingress.tls[0].hosts[0]=$(echo "${CI_ENVIRONMENT_URL}" | awk -F/ '{print $3}') \
-          --set image.repository="${GKE_PROJECT}/${IMAGE}" \
+          --set image.repository="${REGISTRY_HOSTNAME}/${GKE_PROJECT}/${IMAGE}" \
           --set image.tag="${GITHUB_RUN_NUMBER}"
 
