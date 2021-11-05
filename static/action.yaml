@@ -1,5 +1,20 @@
 name: "Deploy static helm chart"
 description: "Deploy static helm chart"
+description: "Build dotnet..."
+inputs:
+  gcloud_key:
+    description: 'Gcloud service account service key (encoded in base64)'
+    default: ''
+    required: true
+  gke_project:
+    description: 'Gcloud project'
+    required: true
+  gke_zone:
+    description: 'Gcloud zone'
+    required: true
+  gke_cluster:
+    description: 'GKE cluster'
+    required: true
 
 runs:
   using: "helm"
@@ -8,13 +23,13 @@ runs:
       uses: actions/checkout@v2
     - uses: google-github-actions/setup-gcloud@master
       with:
-        service_account_key: ${{ secrets.GCLOUD_KEY }}
-        project_id: ${{ secrets.GKE_PROJECT }}
+        service_account_key: ${{ inputs.gcloud_key }}
+        project_id: ${{ inputs.gke_project }}
     - uses: google-github-actions/get-gke-credentials@master
       with:
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        location: ${{ env.GKE_ZONE }}
-        credentials: ${{ secrets.GCLOUD_KEY }}
+        cluster_name: ${{ inputs.gke_cluster }}
+        location: ${{ inputs.gke_zone }}
+        credentials: ${{ inputs.gcloud_key }}
     - name: Install Helm
       run: |
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
