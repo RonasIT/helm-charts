@@ -6,6 +6,7 @@ runs:
   steps: 
     - name: deploy
       run: |
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         helm repo add ronasit https://ronasit-charts.storage.googleapis.com
         helm repo update
         helm upgrade --atomic --install ${CI_PROJECT_NAME}-${CI_ENVIRONMENT_SLUG} ${CHART_REPO} --version ${CHART_VERSION} -f ${CHART_VALUES:="/dev/null"}
